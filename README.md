@@ -2,6 +2,7 @@
 
 ### Group Members:
 * **Miroslav Sklyar** - ID: 24B031107
+* **Alimansur Akhmettayev** - ID: 24B030251
 
 **Practice Teacher:** Alima Kusmanova
 
