@@ -1,0 +1,18 @@
+<div class="container">
+  <h1>KBTU Study Hub</h1>
+  
+  <div class="course-grid">
+    @for (course of courses; track course.id) {
+      <div class="course-card" [routerLink]="['/course', course.id]">
+        <div class="card-logo">
+          <img src="assets/icons/default-course.svg" alt="Course Logo">
+        </div>
+        <div class="card-content">
+          <h3>{{ course.title }}</h3>
+          <p class="course-code">{{ course.code }}</p>
+          <p class="course-desc">{{ course.description }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>
