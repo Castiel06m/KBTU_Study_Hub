@@ -1,0 +1,289 @@
+{
+  "info": {
+    "name": "KBTU Study Hub API",
+    "_postman_id": "kbtu-study-hub-collection",
+    "description": "Full API collection for KBTU Study Hub backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000/api" },
+    { "key": "access_token", "value": "" },
+    { "key": "refresh_token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/register/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"email\": \"john@kbtu.kz\",\n  \"password\": \"Secure1234!\",\n  \"password2\": \"Secure1234!\",\n  \"student_id\": \"24B030001\"\n}"
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"user\": {\n    \"id\": 1,\n    \"username\": \"john_doe\",\n    \"email\": \"john@kbtu.kz\",\n    \"student_id\": \"24B030001\",\n    \"bio\": \"\",\n    \"avatar\": null,\n    \"created_at\": \"2025-01-01T10:00:00Z\"\n  },\n  \"access\": \"eyJ...\",\n  \"refresh\": \"eyJ...\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('access_token', json.access);",
+                  "pm.collectionVariables.set('refresh_token', json.refresh);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/login/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"password\": \"Secure1234!\"\n}"
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"access\": \"eyJ...\",\n  \"refresh\": \"eyJ...\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/token/refresh/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": "{{base_url}}/auth/logout/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "{{base_url}}/auth/profile/"
+          }
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": "{{base_url}}/auth/profile/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bio\": \"3rd year CS student at KBTU\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/categories/"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"id\": 1, \"name\": \"Mathematics\", \"slug\": \"mathematics\" },\n  { \"id\": 2, \"name\": \"Computer Science\", \"slug\": \"computer-science\" }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": "{{base_url}}/categories/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Computer Science\",\n  \"slug\": \"computer-science\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Materials",
+      "item": [
+        {
+          "name": "List All Materials",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/materials/",
+              "host": ["{{base_url}}"],
+              "path": ["materials", ""],
+              "query": [
+                { "key": "type", "value": "lecture", "disabled": true },
+                { "key": "category", "value": "computer-science", "disabled": true },
+                { "key": "search", "value": "algebra", "disabled": true }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": 1,\n    \"author\": { \"id\": 1, \"username\": \"john_doe\" },\n    \"title\": \"Calculus Lecture Notes\",\n    \"description\": \"Week 1-5 notes\",\n    \"file\": \"http://localhost:8000/media/materials/calc.pdf\",\n    \"material_type\": \"lecture\",\n    \"category\": { \"id\": 1, \"name\": \"Mathematics\", \"slug\": \"mathematics\" },\n    \"likes_count\": 5,\n    \"comments_count\": 2,\n    \"is_liked\": false,\n    \"created_at\": \"2025-01-01T10:00:00Z\",\n    \"updated_at\": \"2025-01-01T10:00:00Z\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Create Material",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "{{base_url}}/materials/",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "title", "value": "Calculus Lecture Notes" },
+                { "key": "description", "value": "Week 1-5 lecture notes" },
+                { "key": "material_type", "value": "lecture" },
+                { "key": "category_id", "value": "1" },
+                { "key": "file", "type": "file", "src": "" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Material by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/materials/1/"
+          }
+        },
+        {
+          "name": "Update Material",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": "{{base_url}}/materials/1/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Calculus Notes\",\n  \"description\": \"Updated description\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Material",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "{{base_url}}/materials/1/"
+          }
+        },
+        {
+          "name": "Like / Unlike Material",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "{{base_url}}/materials/1/like/"
+          },
+          "response": [
+            {
+              "name": "Liked",
+              "code": 201,
+              "body": "{ \"liked\": true, \"likes_count\": 6 }"
+            },
+            {
+              "name": "Unliked",
+              "code": 200,
+              "body": "{ \"liked\": false, \"likes_count\": 5 }"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "List Comments for Material",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/materials/1/comments/"
+          }
+        },
+        {
+          "name": "Add Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": "{{base_url}}/materials/1/comments/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Really helpful notes, thanks!\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "{{base_url}}/materials/1/comments/3/"
+          }
+        }
+      ]
+    }
+  ]
+}
