@@ -20,8 +20,8 @@
 
 ## Implementation Checklist
 - [x] Initial Angular project setup
-- [ ] Django backend models & serializers
-- [ ] JWT Authentication (Login/Logout)
-- [ ] CRUD Operations
-- [ ] Routing & Services
+- [x] Django backend models & serializers
+- [x] JWT Authentication (Login/Logout)
+- [x] CRUD Operations
+- [x] Routing & Services
 - [ ] Postman Collection
