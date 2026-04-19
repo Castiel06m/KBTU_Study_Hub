@@ -1,17 +1,25 @@
 <div class="container">
-  <h1>KBTU Study Hub</h1>
-  
+  <h1 class="main-title">Доступные курсы KBTU</h1>
+
   <div class="course-grid">
     @for (course of courses; track course.id) {
-      <div class="course-card" [routerLink]="['/course', course.id]">
-        <div class="card-logo">
-          <img src="assets/icons/default-course.svg" alt="Course Logo">
+      <div class="course-card">
+        <div class="card-header">
+          <span class="category-tag">{{ course.category_name }}</span>
         </div>
-        <div class="card-content">
-          <h3>{{ course.title }}</h3>
-          <p class="course-code">{{ course.code }}</p>
-          <p class="course-desc">{{ course.description }}</p>
+        
+        <h3>{{ course.title }}</h3>
+        <p class="description">{{ course.description }}</p>
+        
+        <div class="card-footer">
+          <button [routerLink]="['/course', course.id]" class="btn-more">
+            Подробнее
+          </button>
         </div>
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <p>Курсы загружаются или список пуст...</p>
       </div>
     }
   </div>

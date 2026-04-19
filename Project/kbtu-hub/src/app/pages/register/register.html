@@ -1,0 +1,36 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Регистрация в KBTU Hub</h2>
+    
+    <form (submit)="onRegister()">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="userData.username" name="username" placeholder="Логин" required>
+      </div>
+
+      <div class="input-group">
+        <input type="email" [(ngModel)]="userData.email" name="email" placeholder="Email" required>
+      </div>
+
+      <div class="input-group">
+        <input type="password" [(ngModel)]="userData.password" name="password" placeholder="Пароль" required>
+      </div>
+
+      <div class="input-group">
+        <label for="role">Кто вы?</label>
+        <select id="role" [(ngModel)]="userData.role" name="role">
+          <option value="student">Студент</option>
+          <option value="teacher">Преподаватель</option>
+        </select>
+      </div>
+
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button type="submit" class="btn-register">Создать аккаунт</button>
+      
+      <div class="footer-links">
+        <span>Уже есть аккаунт?</span>
+        <a routerLink="/login">Войти</a>
+      </div>
+    </form>
+  </div>
+</div>

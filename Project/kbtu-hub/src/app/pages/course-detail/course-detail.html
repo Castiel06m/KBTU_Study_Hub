@@ -1,1 +1,35 @@
-<p>course-detail works!</p>
+<div class="container" *ngIf="course">
+  <a routerLink="/home" class="back-link">← Назад к списку</a>
+
+  <div class="header">
+    <span class="category">{{ course.category_name }}</span>
+    <h1>{{ course.title }}</h1>
+  </div>
+
+  <div class="content-grid">
+    <div class="main-info">
+      <h2>Описание курса</h2>
+      <p>{{ course.description }}</p>
+
+      <div class="lessons-section">
+        <h2>Программа обучения</h2>
+        @for (lesson of course.lessons; track lesson.id) {
+          <div class="lesson-item">
+            <span class="lesson-number">Урок {{ $index + 1 }}</span>
+            <p>{{ lesson.title }}</p>
+          </div>
+        } @empty {
+          <p class="no-data">Уроков пока нет, но скоро появятся!</p>
+        }
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="author-card">
+        <h3>Преподаватель</h3>
+        <p>ID автора: {{ course.author }}</p>
+        <button class="btn-enroll">Записаться на курс</button>
+      </div>
+    </div>
+  </div>
+</div>
