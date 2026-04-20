@@ -16,7 +16,7 @@
 * **Frontend:** Angular (v17+)
 * **Backend:** Django + Django REST Framework
 * **Auth:** JWT (JSON Web Token)
-* **Database:** SQLite/PostgreSQL
+* **Database:** SQLite/PostgreSQL   ]
 
 ## Implementation Checklist
 - [x] Initial Angular project setup

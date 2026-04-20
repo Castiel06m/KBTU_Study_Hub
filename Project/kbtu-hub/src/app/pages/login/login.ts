@@ -22,15 +22,23 @@ export class Login {
   onLogin() {
     this.api.login(this.loginData).subscribe({
       next: (res) => {
-        // Сохраняем токен в память браузера
         localStorage.setItem('access', res.access);
         localStorage.setItem('refresh', res.refresh);
-        console.log('Успешный вход!');
-        this.router.navigate(['/home']); // Переходим на главную
+
+        this.api.getUserProfile().subscribe({
+          next: (profile) => {
+            localStorage.setItem('user_role', profile.role); 
+            console.log('Успешный вход, роль:', profile.role);
+            this.router.navigate(['/home']);
+          },
+          error: (err) => {
+            console.error('Не удалось получить профиль', err);
+            this.router.navigate(['/home']);
+          }
+        });
       },
       error: (err) => {
         alert('Ошибка входа: проверь логин и пароль');
-        console.error(err);
       }
     });
   }

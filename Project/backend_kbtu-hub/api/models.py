@@ -74,6 +74,8 @@ class GuildMessage(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    is_urgent = models.BooleanField(default=False)
+    file = models.FileField(upload_to='guild_files/', null=True, blank=True)
 
     class Meta:
         ordering = ['-created_at']

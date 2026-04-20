@@ -23,7 +23,7 @@ export class App {
 
   logout() {
     this.api.logout();
-    localStorage.removeItem('access');
+    localStorage.removeItem('user_role');
     this.router.navigate(['/login']);
   }
 }

@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
-    category_list, 
+    category_list,
+    join_guild, 
     top_courses, 
     CourseListAPIView, 
     CourseDetailAPIView,
@@ -25,4 +26,5 @@ urlpatterns = [
     # Гильдии и хаб 
     path('guilds/', GuildListAPIView.as_view()),
     path('guilds/<int:guild_id>/messages/', guild_messages),
+    path('guilds/<int:guild_id>/join/', join_guild),
 ]

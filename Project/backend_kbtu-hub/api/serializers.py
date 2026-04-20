@@ -29,11 +29,22 @@ class CourseModelSerializer(serializers.ModelSerializer):
     # Вложенный сериализатор для красоты 
     lessons = LessonSerializer(many=True, read_only=True)
     category_name = serializers.CharField(source='category.name', read_only=True)
+    author_name = serializers.CharField(source='author.username', read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
+    is_enrolled = serializers.SerializerMethodField()
 
     class Meta: 
         model = Course
-        fields = ['id', 'title', 'description', 'category', 'category_name', 'author', 'lessons', 'comments']
+        fields = ['id', 'title', 'description', 'category', 'category_name', 'author', 'author_name', 'lessons', 'comments', 'is_enrolled']
+        read_only_fields = ['author']
+
+    def get_is_enrolled(self, obj):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user') and request.user.is_authenticated:
+            from .models import Enrollment
+            return Enrollment.objects.filter(student=request.user, course=obj).exists()
+        return False
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -47,27 +58,23 @@ class GuildModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guild
         fields = ['id', 'name', 'description', 'leader', 'leader_name', 'members_count', 'created_at']
+        read_only_fields = ['leader', 'created_at']
 # Обычные Serializers
 
-class EnrollmentSerializer(serializers.Serializer):
-    # Используем для логики записи на курс
-    course_id = serializers.IntegerField()
-    student_id = serializers.IntegerField(read_only=True)
-    enrolled_at = serializers.DateTimeField(read_only=True)
-
-    def create(self, validated_data):
-        return Enrollment.objects.create(**validated_data)
+class EnrollmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enrollment
+        fields = ['course'] 
 
 class StatSerializer(serializers.Serializer):
     # Чисто для статистики 
     total_courses = serializers.IntegerField()
     total_students = serializers.IntegerField()
 
-class GuildMessageSerializer(serializers.Serializer):
-    guild_id = serializers.IntegerField()
-    content = serializers.CharField(max_length=1000)
-    sender_username = serializers.CharField(read_only=True)
-    created_at = serializers.DateTimeField(read_only=True)
+class GuildMessageSerializer(serializers.ModelSerializer):
+    sender_username = serializers.CharField(source='sender.username', read_only=True)
 
-    def create(self, validated_data):
-        return GuildMessage.objects.create(**validated_data)
+    class Meta:
+        model = GuildMessage    
+        fields = ['id', 'content', 'sender_username', 'created_at', 'is_urgent', 'file']
+        read_only_fields = ['id', 'sender_username', 'created_at']

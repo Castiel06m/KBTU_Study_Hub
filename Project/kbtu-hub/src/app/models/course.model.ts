@@ -8,9 +8,11 @@ export interface Course {
   title: string;
   description: string;
   category_name: string;
+  author_name: string;
   author: number;
   lessons: Lesson[];
   comments: Comment[]; 
+  is_enrolled: boolean;
 }
 
 export interface Lesson {

@@ -49,3 +49,17 @@
 .btn-logout:hover {
   background: #ff6b81;
 }
+
+.teacher-link {
+  color: #28a745 !important; 
+  font-weight: 600;
+  border: 1px solid #28a745;
+  padding: 5px 12px;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.teacher-link:hover {
+  background: #28a745;
+  color: white !important;
+}

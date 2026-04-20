@@ -54,20 +54,32 @@ def enroll_in_course(request):
 @api_view(['GET', 'POST'])
 @permission_classes([permissions.IsAuthenticated])
 def guild_messages(request, guild_id):
-    """Сообщения внутри гильдии"""
     guild = get_object_or_404(Guild, pk=guild_id)
+
     if request.method == 'GET':
-        messages = guild.messages.all()
+        messages = guild.messages.all().order_by('created_at')
         serializer = GuildMessageSerializer(messages, many=True)
         return Response(serializer.data)
-    
-    if request.method == 'POST':
+
+    elif request.method == 'POST':
         serializer = GuildMessageSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(sender=request.user, guild=guild)
+            serializer.save(sender=request.user, guild=guild) 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        print("DEBUG ERRORS:", serializer.errors) 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def join_guild(request, guild_id):
+    guild = get_object_or_404(Guild, pk=guild_id)
+    
+    if guild.members.filter(id=request.user.id).exists():
+        return Response({'detail': 'Вы уже состоите в этой гильдии'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    guild.members.add(request.user)
+    return Response({'detail': 'Вы успешно вступили в гильдию'}, status=status.HTTP_200_OK)
 
 # CBV 
 
@@ -77,14 +89,25 @@ class CourseListAPIView(APIView):
     
     def get(self, request):
         courses = Course.objects.all()
-        serializer = CourseModelSerializer(courses, many=True)
+        serializer = CourseModelSerializer(courses, many=True, context={'request': request})
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = CourseModelSerializer(data=request.data)
+
+        print("DATA FROM FRONTEND:", request.data)
+
+        if request.user.role != 'teacher':
+            return Response(
+                {'error': 'Только преподаватели могут создавать курсы'}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        serializer = CourseModelSerializer(data=request.data, context={'request': request})
+
         if serializer.is_valid():
             serializer.save(author=request.user) 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print("SERIALIZER ERRORS:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CourseDetailAPIView(APIView):
@@ -96,7 +119,7 @@ class CourseDetailAPIView(APIView):
 
     def get(self, request, pk):
         course = self.get_object(pk)
-        serializer = CourseModelSerializer(course)
+        serializer = CourseModelSerializer(course, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -118,7 +141,6 @@ class CourseDetailAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class GuildListAPIView(APIView):
-    """Список гильдий и создание новой"""
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -129,6 +151,7 @@ class GuildListAPIView(APIView):
     def post(self, request):
         serializer = GuildModelSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(leader=request.user)
+            guild = serializer.save(leader=request.user)
+            guild.members.add(request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

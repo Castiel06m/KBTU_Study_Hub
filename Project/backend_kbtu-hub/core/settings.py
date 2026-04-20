@@ -123,6 +123,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Настройки для загрузки медиа-файлов (фото, документы)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Для бэкенда
 AUTH_USER_MODEL = 'users.User'
 

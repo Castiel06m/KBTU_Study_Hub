@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Course, Guild } from '../models/course.model';
+import { Category, Course, Guild } from '../models/course.model';
+
+
+export interface UserProfile {
+  id: number;
+  username: string;
+  role: 'student' | 'teacher';
+}
 
 export interface LoginResponse {
   access: string;
@@ -27,7 +34,6 @@ export class Api {
   logout() {
     localStorage.removeItem('access');
     localStorage.removeItem('refresh');
-      // Можно добавить редирект на логин прямо здесь или в компоненте
   }
 
   isLoggedIn(): boolean {
@@ -50,8 +56,48 @@ export class Api {
     return this.http.post(`${this.BASE_URL}/guilds/${guildId}/join/`, {});
   }
 
+  getMessages(guildId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.BASE_URL}/guilds/${guildId}/messages/`);
+  }
+
+  sendMessage(guildId: number, content: string, isUrgent: boolean, file: File | null): Observable<any> {
+    const formData = new FormData();
+    formData.append('content', content);
+    formData.append('is_urgent', String(isUrgent));
+    
+    if (file) {
+      formData.append('file', file); 
+    }
+
+    return this.http.post(`${this.BASE_URL}/guilds/${guildId}/messages/`, formData);
+  }
+
+  createGuild(guildData: any): Observable<Guild> {
+    return this.http.post<Guild>(`${this.BASE_URL}/guilds/`, guildData);
+  }
+
   addComment(courseId: number, text: string): Observable<any> {
     return this.http.post(`${this.BASE_URL}/courses/${courseId}/comment/`, { text });
+  }
+
+  enrollInCourse(courseId: number): Observable<any> {
+    return this.http.post(`${this.BASE_URL}/courses/enroll/`, { course: courseId });
+  }
+
+  getUserProfile(): Observable<UserProfile> {
+    return this.http.get<UserProfile>(`${this.BASE_URL}/users/me/`);
+  }
+
+  getUserRole(): string | null {
+    return localStorage.getItem('user_role');
+  }
+
+  getCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.BASE_URL}/categories/`);
+  }
+
+  createCourse(courseData: any): Observable<Course> {
+    return this.http.post<Course>(`${this.BASE_URL}/courses/`, courseData);
   }
 }
 

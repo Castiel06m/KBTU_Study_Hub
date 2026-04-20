@@ -13,6 +13,7 @@ import { Course } from '../../models/course.model';
 })
 export class CourseDetail implements OnInit {
   course: Course | null = null;
+  isEnrolled: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,11 +27,32 @@ export class CourseDetail implements OnInit {
       this.api.getCourseById(id).subscribe({
         next: (data) => {
           this.course = data;
-          console.log('Данные курса загружены:', data);
+          this.isEnrolled = data.is_enrolled;
+          // console.log('Данные курса загружены:', data);
           this.cdr.detectChanges(); // Принудительно обновляем экран
         },
         error: (err) => console.error(err)
       });
     }
+  }
+
+  enroll() {
+    if (!this.course) return;
+
+    this.api.enrollInCourse(this.course.id).subscribe({
+      next: (res) => {
+        alert('Вы успешно записаны на курс!');
+        this.isEnrolled = true; 
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        const msg = err.error?.message || 'Ошибка при записи';
+        alert(msg);
+        if (msg.includes('уже записаны')) {
+            this.isEnrolled = true;
+            this.cdr.detectChanges();
+        }
+      }
+    });
   }
 }

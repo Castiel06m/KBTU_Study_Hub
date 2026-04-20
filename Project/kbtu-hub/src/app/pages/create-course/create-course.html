@@ -1,0 +1,15 @@
+<div class="container">
+  <h2>Создание нового курса</h2>
+  <form (ngSubmit)="onSubmit()">
+    <input [(ngModel)]="courseData.title" name="title" placeholder="Название курса" required>
+    
+    <textarea [(ngModel)]="courseData.description" name="description" placeholder="Описание курса"></textarea>
+    
+    <select [(ngModel)]="courseData.category" name="category" required>
+      <option [ngValue]="null" disabled>Выберите категорию</option>
+      <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+    </select>
+    
+    <button type="submit" class="btn-create">Опубликовать курс</button>
+  </form>
+</div>

@@ -27,8 +27,15 @@
     <div class="sidebar">
       <div class="author-card">
         <h3>Преподаватель</h3>
-        <p>ID автора: {{ course.author }}</p>
-        <button class="btn-enroll">Записаться на курс</button>
+        <p>{{ course.author_name }}</p>
+        
+        <button 
+          class="btn-enroll" 
+          (click)="enroll()" 
+          [disabled]="isEnrolled"
+          [style.background]="isEnrolled ? '#6c757d' : '#28a745'">
+          {{ isEnrolled ? 'Вы уже записаны' : 'Записаться на курс' }}
+        </button>
       </div>
     </div>
   </div>

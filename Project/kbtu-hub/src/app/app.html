@@ -5,6 +5,14 @@
     <div class="nav-links">
       <a routerLink="/home" routerLinkActive="active">Курсы</a>
       <a routerLink="/guilds" routerLinkActive="active">Гильдии</a>
+      
+      <a *ngIf="api.getUserRole() === 'teacher'" 
+         routerLink="/create-course" 
+         routerLinkActive="active" 
+         class="teacher-link">
+         + Создать курс
+      </a>
+
       <button (click)="logout()" class="btn-logout">Выйти</button>
     </div>
   </div>
