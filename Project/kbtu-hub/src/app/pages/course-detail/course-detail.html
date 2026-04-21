@@ -9,25 +9,105 @@
   <div class="content-grid">
     <div class="main-info">
       <h2>Описание курса</h2>
-      <p>{{ course.description }}</p>
+      <p class="course-description">{{ course.description }}</p>
 
       <div class="lessons-section">
         <h2>Программа обучения</h2>
         @for (lesson of course.lessons; track lesson.id) {
-          <div class="lesson-item">
-            <span class="lesson-number">Урок {{ $index + 1 }}</span>
-            <p>{{ lesson.title }}</p>
+          <div class="lesson-item" [class.expanded]="expandedLessonId === lesson.id">
+            <div class="lesson-header" (click)="toggleLesson(lesson.id)">
+              <div class="lesson-info">
+                <span class="lesson-number">Урок {{ $index + 1 }}</span>
+                <p class="lesson-title">{{ lesson.title }}</p>
+              </div>
+              <span class="arrow">{{ expandedLessonId === lesson.id ? '▼' : '▶' }}</span>
+            </div>
+            
+            <div class="lesson-content" *ngIf="expandedLessonId === lesson.id">
+              <div class="description-block">
+                <h4>Описание:</h4>
+                <p>{{ lesson.content }}</p>
+              </div>
+              
+              <div class="video-container" *ngIf="lesson.video_url">
+                <iframe 
+                  [src]="getSafeVideoUrl(lesson.video_url)" 
+                  frameborder="0" 
+                  allowfullscreen>
+                </iframe>
+              </div>
+
+              <div class="file-attachment" *ngIf="lesson.file">
+                <a [href]="lesson.file" target="_blank" class="btn-file">
+                  <span>📎 Скачать материалы к уроку</span>
+                </a>
+              </div>
+            </div>
           </div>
         } @empty {
           <p class="no-data">Уроков пока нет, но скоро появятся!</p>
         }
+      </div>
+
+      <div *ngIf="isAuthor" class="admin-tools">
+        <div class="admin-header">
+          <span class="admin-icon">🛠</span>
+          <h3>Панель преподавателя</h3>
+        </div>
+        
+        <div class="add-lesson-form">
+          <div class="form-group">
+            <label>Название урока</label>
+            <input [(ngModel)]="newLesson.title" placeholder="Введите название..." class="form-control-custom">
+          </div>
+
+          <div class="form-group">
+            <label>Содержание / Описание</label>
+            <textarea [(ngModel)]="newLesson.content" placeholder="О чем этот урок?" class="form-control-custom textarea"></textarea>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Ссылка на YouTube</label>
+              <input [(ngModel)]="newLesson.video_url" placeholder="https://www.youtube.com/watch?v=..." class="form-control-custom">
+            </div>
+            
+            <div class="form-group">
+              <label>Файл (PDF, архив и т.д.)</label>
+              <input type="file" (change)="onFileSelected($event)" class="file-input">
+            </div>
+          </div>
+          
+          <button (click)="addLesson()" class="btn-create-lesson">Опубликовать урок</button>
+        </div>
+      </div>
+
+      <div class="comments-section">
+        <h2>Отзывы</h2>
+        
+        <div class="comment-form">
+          <textarea [(ngModel)]="commentText" placeholder="Напишите ваш отзыв..." class="form-control"></textarea>
+          <button (click)="sendComment()" class="btn-save">Отправить</button>
+        </div>
+
+        <div class="comments-list">
+          @for (comment of course.comments; track comment.id) {
+            <div class="comment-item">
+              <strong>{{ comment.user_name }}</strong>
+              <p>{{ comment.text }}</p>
+              <small>{{ comment.created_at | date:'dd.MM.yyyy' }}</small>
+            </div>
+          } @empty {
+            <p class="no-data">Отзывов пока нет. Станьте первым!</p>
+          }
+        </div>
       </div>
     </div>
 
     <div class="sidebar">
       <div class="author-card">
         <h3>Преподаватель</h3>
-        <p>{{ course.author_name }}</p>
+        <p class="author-name">{{ course.author_name }}</p>
         
         <button 
           class="btn-enroll" 

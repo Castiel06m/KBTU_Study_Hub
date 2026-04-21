@@ -14,16 +14,16 @@ class CategorySerializer(serializers.ModelSerializer):
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = ['id', 'title', 'content', 'order', 'course', 'video_url']
+        fields = ['id', 'title', 'content', 'order', 'course', 'video_url', 'file']
 
 class CommentSerializer(serializers.ModelSerializer):
-    # Чтобы видеть имя пользователя, а не просто его ID
+    #  имя пользователя, а не просто его ID
     user_name = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
         model = Comment
         fields = ['id', 'course', 'user', 'user_name', 'text', 'created_at']
-        read_only_fields = ['user', 'created_at'] # Юзера будем брать из request.user во вьюхе
+        read_only_fields = ['user', 'course', 'created_at'] # Юзера будем брать из request.user во вьюхе
 
 class CourseModelSerializer(serializers.ModelSerializer):
     # Вложенный сериализатор для красоты 

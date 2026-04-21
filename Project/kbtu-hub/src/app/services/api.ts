@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Category, Course, Guild } from '../models/course.model';
+import { Category, Course, Guild, LessonCreate } from '../models/course.model';
 
 
 export interface UserProfile {
@@ -98,6 +98,19 @@ export class Api {
 
   createCourse(courseData: any): Observable<Course> {
     return this.http.post<Course>(`${this.BASE_URL}/courses/`, courseData);
+  }
+
+  createLesson(lessonData: LessonCreate): Observable<any> {
+    const formData = new FormData();
+    formData.append('title', lessonData.title);
+    formData.append('content', lessonData.content);
+    formData.append('course', String(lessonData.course));
+    
+    if (lessonData.order) formData.append('order', String(lessonData.order));
+    if (lessonData.video_url) formData.append('video_url', lessonData.video_url);
+    if (lessonData.file) formData.append('file', lessonData.file);
+
+    return this.http.post(`${this.BASE_URL}/lessons/`, formData);
   }
 }
 

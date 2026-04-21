@@ -7,8 +7,9 @@ export interface Course {
   id: number;
   title: string;
   description: string;
-  category_name: string;
-  author_name: string;
+  category: number;
+  category_name?: string;
+  author_name?: string;
   author: number;
   lessons: Lesson[];
   comments: Comment[]; 
@@ -20,6 +21,16 @@ export interface Lesson {
   title: string;
   content: string;
   video_url?: string; 
+  file?: string;
+}
+
+export interface LessonCreate {
+  title: string;
+  content: string;
+  course: number;
+  order?: number;
+  video_url?: string;
+  file?: File | null;
 }
 
 export interface Comment {
@@ -33,6 +44,6 @@ export interface Guild {
   id: number;
   name: string;
   description: string;
-  leader_name: string;
+  leader_name: string;  
   members_count: number;
 }

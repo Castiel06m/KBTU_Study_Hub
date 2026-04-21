@@ -4,12 +4,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from django.shortcuts import get_object_or_404
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from .models import Course, Category, Guild 
 from .serializers import (
     CourseModelSerializer, CategorySerializer, 
     GuildModelSerializer, CommentSerializer, 
-    EnrollmentSerializer, GuildMessageSerializer
+    EnrollmentSerializer, GuildMessageSerializer, LessonSerializer
 )
 
 # FBV 
@@ -153,5 +154,22 @@ class GuildListAPIView(APIView):
         if serializer.is_valid():
             guild = serializer.save(leader=request.user)
             guild.members.add(request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class LessonCreateAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request):
+        course_id = request.data.get('course')
+        course = get_object_or_404(Course, pk=course_id)
+        
+        if course.author != request.user:
+            return Response({'error': 'Только автор курса может добавлять уроки'}, status=status.HTTP_403_FORBIDDEN)
+        
+        serializer = LessonSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

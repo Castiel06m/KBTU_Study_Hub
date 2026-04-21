@@ -36,7 +36,8 @@ class Lesson(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField() 
     order = models.IntegerField(default=1) 
-    video_url = models.URLField(blank=True, null = True)
+    video_url = models.URLField(max_length=500, null=True, blank=True) 
+    file = models.FileField(upload_to='lesson_materials/', null=True, blank=True) 
 
     def __str__(self):
         return f"{self.course.title} - {self.title}"
