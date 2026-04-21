@@ -1,76 +1,97 @@
 <div class="guilds-container">
   <aside class="sidebar">
-    <h2>Гильдии</h2>
-    
-    <button (click)="showCreateForm = !showCreateForm" class="btn-toggle">
-        {{ showCreateForm ? 'Закрыть' : '+ Создать гильдию' }}
-    </button>
-
-    <div *ngIf="showCreateForm" class="create-form">
-        <input [(ngModel)]="newGuild.name" placeholder="Название гильдии">
-        <textarea [(ngModel)]="newGuild.description" placeholder="Описание..."></textarea>
-        <button (click)="createGuild()" class="btn-save">Опубликовать</button>
+    <div class="sidebar-header">
+      <h2>Гильдии</h2>
+      <button (click)="showCreateForm = !showCreateForm" class="btn-toggle">
+        {{ showCreateForm ? '✕ Закрыть' : '+ Создать гильдию' }}
+      </button>
     </div>
 
-    <hr>
-    
-    <div *ngFor="let g of guilds" 
-         (click)="selectGuild(g)" 
-         class="guild-card" 
-         [class.active]="selectedGuild?.id === g.id">
-        <h3>{{ g.name }}</h3>
-        <p>Лидер: {{ g.leader_name }}</p>
-        <small>Участников: {{ g.members_count }}</small>
-        <button (click)="join(g.id); $event.stopPropagation()" class="btn-join">
-            Вступить
-        </button>
+    <div *ngIf="showCreateForm" class="create-form">
+      <input [(ngModel)]="newGuild.name" placeholder="Название гильдии" class="form-input">
+      <textarea [(ngModel)]="newGuild.description" placeholder="Описание гильдии..." class="form-input textarea"></textarea>
+      <button (click)="createGuild()" class="btn-publish">Опубликовать</button>
+    </div>
+
+    <div class="guilds-list">
+      <div *ngFor="let g of guilds" 
+           (click)="selectGuild(g)" 
+           class="guild-card" 
+           [class.active]="selectedGuild?.id === g.id">
+        <div class="guild-card-info">
+          <h3>{{ g.name }}</h3>
+          <p class="leader">Лидер: <span>{{ g.leader_name }}</span></p>
+          <div class="guild-footer">
+            <span class="members-count">👥 {{ g.members_count }}</span>
+            <button (click)="join(g.id); $event.stopPropagation()" class="btn-join-small">
+              Вступить
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </aside>    
 
   <section class="chat-area" *ngIf="selectedGuild; else noSelect">
     <div class="chat-header">
-      <h2>{{ selectedGuild.name }}</h2>
-      <p>{{ selectedGuild.description }}</p>
+      <div class="header-info">
+        <h2>{{ selectedGuild.name }}</h2>
+        <p>{{ selectedGuild.description }}</p>
+      </div>
     </div>
 
     <div class="messages">
       <div *ngFor="let m of messages" 
            [class.urgent-msg]="m.is_urgent" 
-           class="message"
+           class="message-wrapper"
            (click)="replyToUrgent(m)"> 
         
-        <strong [style.color]="m.is_urgent ? '#ff4d4d' : '#333'">
-          {{ m.sender_username }} {{ m.is_urgent ? '⚠️ КЛИЧ О ПОМОЩИ' : '' }}
-        </strong>
-        
-        <p>{{ m.content }}</p>
-        
-        <div *ngIf="m.file" class="file-attachment">
+        <div class="message-bubble">
+          <div class="message-meta">
+            <span class="sender" [style.color]="m.is_urgent ? '#ff4d4d' : '#003366'">
+              {{ m.sender_username }}
+            </span>
+            <span class="urgent-badge" *ngIf="m.is_urgent">⚠️ КЛИЧ О ПОМОЩИ</span>
+          </div>
+          
+          <p class="message-text">{{ m.content }}</p>
+          
+          <div *ngIf="m.file" class="file-attachment">
             <a [href]="m.file" target="_blank" class="file-link" (click)="$event.stopPropagation()">
-              📎 Прикрепленный файл
+              <span class="file-icon">📎</span> Прикрепленный файл
             </a>
+          </div>
+          
+          <span class="message-time">{{ m.created_at | date:'HH:mm' }}</span>
         </div>
-        
-        <small>{{ m.created_at | date:'HH:mm' }}</small>
       </div>
     </div>
 
     <div class="input-area">
-      <input [(ngModel)]="newMessage" 
-             (keyup.enter)="sendMsg()" 
-             placeholder="Напишите сообщение (нажмите на клич для ответа)...">
-      
-      <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)">
-      <button (click)="fileInput.click()" title="Прикрепить файл">📎</button>
+      <div class="input-wrapper">
+        <input [(ngModel)]="newMessage" 
+               (keyup.enter)="sendMsg()" 
+               placeholder="Напишите сообщение..." 
+               class="chat-input">
+        
+        <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)">
+        <button class="btn-icon" (click)="fileInput.click()" title="Прикрепить файл">📎</button>
+      </div>
 
-      <button (click)="sendMsg(false)">Отправить</button>
-      <button class="btn-help" (click)="sendMsg(true)">🆘 Клич</button>
+      <div class="action-buttons">
+        <button class="btn-send" (click)="sendMsg(false)">Отправить</button>
+        <button class="btn-help" (click)="sendMsg(true)">🆘 Клич</button>
+      </div>
     </div>
   </section>
 
   <ng-template #noSelect>
     <div class="no-selection">
-      <h3>Выберите гильдию, чтобы войти в чат</h3>
+      <div class="no-selection-content">
+        <span class="no-selection-icon">💬</span>
+        <h3>Выберите гильдию, чтобы войти в чат</h3>
+        <p>Здесь вы сможете общаться с коллегами и просить помощи</p>
+      </div>
     </div>
   </ng-template>
 </div>

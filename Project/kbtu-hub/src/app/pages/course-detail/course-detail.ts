@@ -20,22 +20,25 @@ export class CourseDetail implements OnInit {
   selectedFile: File | null = null;
   commentText = '';
   expandedLessonId: number | null = null;
+  userRole: string = '';
 
   newLesson: LessonCreate = {
     title: '',
     content: '',
     course: 0,
     video_url: ''
+
   };
 
   constructor(
     private route: ActivatedRoute,
-    private api: Api,
+    public api: Api,
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer 
   ) {}
 
   ngOnInit() {
+    this.userRole = this.api.getUserRole() || '';
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.api.getCourseById(id).subscribe({

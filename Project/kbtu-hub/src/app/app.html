@@ -1,6 +1,9 @@
 <nav class="navbar" *ngIf="api.isLoggedIn()">
   <div class="nav-container">
-    <a routerLink="/home" class="logo">KBTU Hub</a>
+    <a routerLink="/home" class="logo-wrapper">
+      <span class="logo-text">KBTU</span>
+      <span class="logo-subtext">Hub</span>
+    </a>
     
     <div class="nav-links">
       <a routerLink="/home" routerLinkActive="active">Курсы</a>
@@ -10,7 +13,7 @@
          routerLink="/create-course" 
          routerLinkActive="active" 
          class="teacher-link">
-         + Создать курс
+         <span>+</span> Создать курс
       </a>
 
       <button (click)="logout()" class="btn-logout">Выйти</button>
@@ -18,6 +21,6 @@
   </div>
 </nav>
 
-<main>
+<main class="content-wrapper">
   <router-outlet></router-outlet>
 </main>
