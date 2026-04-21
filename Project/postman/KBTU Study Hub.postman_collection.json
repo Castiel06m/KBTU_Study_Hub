@@ -1,0 +1,345 @@
+{
+  "info": {
+    "_postman_id": "b6cbd01b-1d11-4c36-ab20-20a0b700397e",
+    "name": "KBTU Study Hub",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53652984"
+  },
+  "item": [
+    {
+      "name": "Get All Courses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/courses/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "courses",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"Miroslav\",\r\n    \"password\": \"mirik\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/login/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"Miroslav\",\r\n    \"password\": \"mirik\",\r\n    \"email\": \"mir@kbtu.kz\",\r\n    \"role\": \"student\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/users/register/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "users",
+            "register",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Categories",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/categories/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "categories",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Top Courses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/courses/top/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "courses",
+            "top",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Courses",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/courses/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "courses",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Course Details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/courses/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "courses",
+            "1",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Courses",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/courses/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "courses",
+            "1",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Course",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/courses/3/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "courses",
+            "3",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Lesson",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/lessons/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "lessons",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Comment",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/courses/1/comment/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "courses",
+            "1",
+            "comment",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Enroll",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/courses/enroll/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "courses",
+            "enroll",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Guild List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/guilds/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "guilds",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Send Message",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"content\": \"Guys, I need help with my Django project!\",\r\n    \"is_urgent\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/guilds/1/messages/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "guilds",
+            "1",
+            "messages",
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2ODAxOTI2LCJpYXQiOjE3NzY4MDE2MjYsImp0aSI6Ijc2ZjJkYjFmMmRiNDQ3MWE5NzJjMzRmZGQxYjQ0NjExIiwidXNlcl9pZCI6IjIifQ.Xfgs0Eb6h-87NOvjGMOsBdY8dKl7M8gW1oorEZVAc40",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    }
+  ]
+}
