@@ -24,4 +24,4 @@
 - [x] JWT Authentication (Login/Logout)
 - [x] CRUD Operations
 - [x] Routing & Services
-- [ ] Postman Collection
+- [x] Postman Collection
